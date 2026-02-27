@@ -67,7 +67,7 @@ export function createStore() {
     addEntry(draft: EntryDraftInput): EntryResult {
       const { entry, error } = createEntryFromDraft(draft);
       if (!entry || error) {
-        return { entry: null, error: error || "Could not save entry." };
+        return { entry: null, error: error || "Eintrag konnte nicht gespeichert werden." };
       }
 
       state.entries.push(entry);
@@ -78,7 +78,7 @@ export function createStore() {
     updateEntry(entryId: string, draft: EntryDraftInput): EntryResult {
       const index = state.entries.findIndex((item) => item.id === entryId);
       if (index < 0) {
-        return { entry: null, error: "Entry not found." };
+        return { entry: null, error: "Eintrag wurde nicht gefunden." };
       }
 
       const existing = state.entries[index];
@@ -91,7 +91,7 @@ export function createStore() {
       );
 
       if (!entry || error) {
-        return { entry: null, error: error || "Could not update entry." };
+        return { entry: null, error: error || "Eintrag konnte nicht aktualisiert werden." };
       }
 
       state.entries[index] = entry;

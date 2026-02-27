@@ -40,8 +40,8 @@ export function renderEntryRow(entry: Entry, withActions: boolean): string {
         ${
           withActions
             ? `<div class="mt-1 flex items-center justify-end gap-2">
-                <button data-action="edit-entry" data-entry-id="${entry.id}" class="text-xs font-semibold text-slate-600 hover:text-slate-900">Edit</button>
-                <button data-action="delete-entry" data-entry-id="${entry.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-700">Delete</button>
+                <button data-action="edit-entry" data-entry-id="${entry.id}" class="text-xs font-semibold text-slate-600 hover:text-slate-900">Bearbeiten</button>
+                <button data-action="delete-entry" data-entry-id="${entry.id}" class="text-xs font-semibold text-rose-600 hover:text-rose-700">Loeschen</button>
               </div>`
             : ""
         }
@@ -69,9 +69,9 @@ export function renderBottomNav(currentRoute: Route): string {
   return `
     <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md border-t border-slate-200 bg-white px-4 pt-2 pb-[calc(env(safe-area-inset-bottom)+18px)] z-30">
       <div class="flex items-center justify-between gap-4">
-        ${renderNavItem("home", currentRoute, "home", "Home")}
-        ${renderNavItem("entries", currentRoute, "list", "Entries")}
-        ${renderNavItem("insights", currentRoute, "bar_chart", "Insights")}
+        ${renderNavItem("home", currentRoute, "home", "Start")}
+        ${renderNavItem("entries", currentRoute, "list", "Eintraege")}
+        ${renderNavItem("insights", currentRoute, "bar_chart", "Einblicke")}
       </div>
     </nav>
   `;
@@ -84,7 +84,7 @@ export function renderFab(): string {
         type="button"
         data-action="open-sheet"
         class="group flex items-center justify-center w-14 h-14 rounded-full bg-slate-900 shadow-lg shadow-green-900/20 hover:scale-105 active:scale-95 transition-transform"
-        aria-label="Add entry"
+        aria-label="Eintrag hinzufuegen"
       >
         <span class="material-symbols-outlined text-white text-3xl group-hover:rotate-90 transition-transform duration-300">add</span>
       </button>
@@ -116,12 +116,13 @@ export function renderEmptyCard(message: string): string {
 
 export function formatChangeText(change: number, suffix: string): string {
   const rounded = Math.round(change * 10) / 10;
+  const valueText = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1).replace(".", ",");
   const sign = rounded >= 0 ? "+" : "";
-  return `${sign}${rounded}% ${suffix}`;
+  return `${sign}${valueText} % ${suffix}`;
 }
 
 export function formatTargetChip(targetAmount: number): string {
-  return `Target: ${formatCurrency(targetAmount)}`;
+  return `Ziel: ${formatCurrency(targetAmount)}`;
 }
 
 export function formatMoney(amount: number): string {

@@ -1,5 +1,4 @@
 import { addDays, endOfMonth, parseISODate, startOfDay, startOfMonth, startOfWeekMonday, todayISODate } from "./date";
-import { toMoney } from "./entry";
 import { ENTRY_TYPE_META, type Entry, type EntryType } from "./types";
 
 export interface DaySeriesPoint {
@@ -29,11 +28,11 @@ function sumEntriesBetween(entries: Entry[], rangeStart: Date, rangeEnd: Date): 
   for (const entry of entries) {
     const entryDate = parseISODate(entry.date);
     if (entryDate >= rangeStart && entryDate < rangeEnd) {
-      total += toMoney(entry.potential);
+      total += entry.potential;
     }
   }
 
-  return toMoney(total);
+  return Math.max(0, Math.round(total));
 }
 
 function computeChangePercent(current: number, previous: number): number {
@@ -62,7 +61,7 @@ export function computeInsights(entries: Entry[], now: Date = new Date()): Insig
   for (let offset = 6; offset >= 0; offset -= 1) {
     const pointDate = addDays(today, -offset);
     const pointEnd = addDays(pointDate, 1);
-    const dayLabel = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(pointDate).charAt(0);
+    const dayLabel = new Intl.DateTimeFormat("de-DE", { weekday: "short" }).format(pointDate).replace(".", "");
 
     series.push({
       label: dayLabel,
@@ -71,11 +70,11 @@ export function computeInsights(entries: Entry[], now: Date = new Date()): Insig
     });
   }
 
-  const last7Total = toMoney(series.reduce((sum, point) => sum + point.value, 0));
+  const last7Total = Math.max(0, Math.round(series.reduce((sum, point) => sum + point.value, 0)));
   const daysElapsed = Math.max(1, now.getDate());
-  const averageDailySaved = toMoney(monthTotal / daysElapsed);
+  const averageDailySaved = Math.max(0, Math.round(monthTotal / daysElapsed));
   const daysInMonth = endOfMonth(now).getDate();
-  const projectedMonthly = toMoney(averageDailySaved * daysInMonth);
+  const projectedMonthly = Math.max(0, Math.round(averageDailySaved * daysInMonth));
 
   const categoryTotals: Record<EntryType, number> = {
     avoid: 0,
@@ -86,7 +85,7 @@ export function computeInsights(entries: Entry[], now: Date = new Date()): Insig
   for (const entry of entries) {
     const entryDate = parseISODate(entry.date);
     if (entryDate >= monthStart && entryDate < tomorrow) {
-      categoryTotals[entry.type] += toMoney(entry.potential);
+      categoryTotals[entry.type] += entry.potential;
     }
   }
 
@@ -95,7 +94,7 @@ export function computeInsights(entries: Entry[], now: Date = new Date()): Insig
   )[0] || [null, 0];
 
   const topCategory =
-    topCategoryType && topCategoryValue > 0 ? ENTRY_TYPE_META[topCategoryType].label : "No entries yet";
+    topCategoryType && topCategoryValue > 0 ? ENTRY_TYPE_META[topCategoryType].label : "Keine Eintraege";
 
   return {
     todayTotal,

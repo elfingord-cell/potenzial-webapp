@@ -1,15 +1,22 @@
-import { toMoney } from "./entry";
+import { coerceStoredAmountToCents, normalizeCents } from "./format";
+import { STORAGE_VERSION } from "./types";
 import type { Entry, Goal } from "./types";
 
 export const DEFAULT_GOAL: Goal = {
-  title: "Europe Trip",
-  targetAmount: 5000,
+  title: "Europa-Reise",
+  targetAmount: 500000,
   deadline: ""
 };
 
-export function sanitizeGoalInput(input: Partial<Goal> | null | undefined, fallback: Goal = DEFAULT_GOAL): Goal {
+export function sanitizeGoalInput(
+  input: Partial<Goal> | null | undefined,
+  fallback: Goal = DEFAULT_GOAL,
+  sourceVersion: number = STORAGE_VERSION
+): Goal {
   const title = String(input?.title ?? fallback.title).trim() || DEFAULT_GOAL.title;
-  const targetAmount = toMoney(input?.targetAmount ?? fallback.targetAmount);
+  const targetRaw = input?.targetAmount ?? fallback.targetAmount;
+  const targetAmount =
+    sourceVersion < STORAGE_VERSION ? coerceStoredAmountToCents(targetRaw, sourceVersion) : normalizeCents(targetRaw);
   const deadlineValue = String(input?.deadline ?? fallback.deadline ?? "").trim();
   const deadline = /^\d{4}-\d{2}-\d{2}$/.test(deadlineValue) ? deadlineValue : "";
 
@@ -26,8 +33,8 @@ export function computeGoalProgress(entries: Entry[], targetAmount: number): {
   progressPercent: number;
   progressRingPercent: number;
 } {
-  const totalSaved = toMoney(entries.reduce((sum, entry) => sum + toMoney(entry.potential), 0));
-  const sanitizedTarget = toMoney(targetAmount);
+  const totalSaved = Math.max(0, Math.round(entries.reduce((sum, entry) => sum + entry.potential, 0)));
+  const sanitizedTarget = Math.max(0, Math.round(targetAmount));
   const rawPercent = sanitizedTarget > 0 ? (totalSaved / sanitizedTarget) * 100 : 0;
 
   return {

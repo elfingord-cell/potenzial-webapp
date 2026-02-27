@@ -1,3 +1,5 @@
+import { formatDateTimeDE } from "./format";
+
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 export function todayISODate(now: Date = new Date()): string {
@@ -63,25 +65,16 @@ export function isYesterday(candidate: Date, reference: Date): boolean {
 export function formatEntryDateLabel(dateValue: string, timeValue: string, now: Date = new Date()): string {
   const parsedDate = parseISODate(dateValue);
   const parsedTime = new Date(timeValue);
-  const timeDate = Number.isNaN(parsedTime.getTime()) ? parsedDate : parsedTime;
+  const baseTime = Number.isNaN(parsedTime.getTime()) ? now : parsedTime;
+  const combined = new Date(
+    parsedDate.getFullYear(),
+    parsedDate.getMonth(),
+    parsedDate.getDate(),
+    baseTime.getHours(),
+    baseTime.getMinutes(),
+    0,
+    0
+  );
 
-  const timeLabel = new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "2-digit"
-  }).format(timeDate);
-
-  if (isSameDay(parsedDate, now)) {
-    return `Today, ${timeLabel}`;
-  }
-
-  if (isYesterday(parsedDate, now)) {
-    return `Yesterday, ${timeLabel}`;
-  }
-
-  const dateLabel = new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric"
-  }).format(parsedDate);
-
-  return `${dateLabel}, ${timeLabel}`;
+  return formatDateTimeDE(combined, "relative");
 }

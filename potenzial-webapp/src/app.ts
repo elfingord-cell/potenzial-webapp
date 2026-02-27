@@ -2,6 +2,7 @@ import { computeGoalProgress } from "./models/goal";
 import { computeInsights } from "./models/insights";
 import { createEntryFromDraft, sortEntriesByMostRecent, toDraftFromEntry } from "./models/entry";
 import { todayISODate } from "./models/date";
+import { formatEuroInput, parseEuroInput } from "./models/format";
 import { ENTRY_TYPES, type EntryDraftInput, type EntryType, type Route } from "./models/types";
 import { createStore } from "./storage/store";
 import { renderBottomNav, renderFab } from "./ui/components";
@@ -47,7 +48,7 @@ function defaultSheetDraft(type: EntryType = "avoid"): SheetDraftValues {
 }
 
 function formatInputValue(value: number): string {
-  return value > 0 ? value.toFixed(2) : "";
+  return formatEuroInput(value);
 }
 
 function getDraftFromEntry(entryId: string): SheetDraftValues {
@@ -61,9 +62,9 @@ function getDraftFromEntry(entryId: string): SheetDraftValues {
 
   return {
     type: draft.type,
-    amount: formatInputValue(draft.amount ?? 0),
-    referencePrice: formatInputValue(draft.referencePrice ?? 0),
-    paidPrice: formatInputValue(draft.paidPrice ?? 0),
+    amount: typeof draft.amount === "number" ? formatInputValue(draft.amount) : "",
+    referencePrice: typeof draft.referencePrice === "number" ? formatInputValue(draft.referencePrice) : "",
+    paidPrice: typeof draft.paidPrice === "number" ? formatInputValue(draft.paidPrice) : "",
     note: draft.note || "",
     date: draft.date || todayISODate()
   };
@@ -81,10 +82,10 @@ function buildEntryDraftFromForm(form: HTMLFormElement): EntryDraftInput {
   };
 
   if (type === "cheaper") {
-    draft.referencePrice = Number(formData.get("referencePrice") || 0);
-    draft.paidPrice = Number(formData.get("paidPrice") || 0);
+    draft.referencePrice = String(formData.get("referencePrice") || "");
+    draft.paidPrice = String(formData.get("paidPrice") || "");
   } else {
-    draft.amount = Number(formData.get("amount") || 0);
+    draft.amount = String(formData.get("amount") || "");
   }
 
   return draft;
@@ -151,20 +152,20 @@ function closeSheet(): void {
 
 function updateGoalViaPrompt(): void {
   const state = store.getState();
-  const title = window.prompt("Goal title", state.goal.title);
+  const title = window.prompt("Zielname", state.goal.title);
   if (title === null) {
     return;
   }
 
-  const targetText = window.prompt("Target amount (USD)", String(state.goal.targetAmount));
+  const targetText = window.prompt("Zielbetrag (EUR)", formatEuroInput(state.goal.targetAmount));
   if (targetText === null) {
     return;
   }
 
-  const parsedTarget = Number(targetText);
+  const parsedTarget = parseEuroInput(targetText);
   store.saveGoal({
     title,
-    targetAmount: Number.isFinite(parsedTarget) ? parsedTarget : state.goal.targetAmount
+    targetAmount: parsedTarget !== null ? parsedTarget : state.goal.targetAmount
   });
 
   render();
@@ -176,7 +177,7 @@ function handleDeleteEntry(entryId: string): void {
     return;
   }
 
-  const shouldDelete = window.confirm("Delete this entry?");
+  const shouldDelete = window.confirm("Diesen Eintrag loeschen?");
   if (!shouldDelete) {
     return;
   }

@@ -1,11 +1,6 @@
 import { formatEntryDateLabel, normalizeISODate } from "./date";
-import { ENTRY_TYPE_META, ENTRY_TYPES, type Entry, type EntryDraftInput, type EntryType } from "./types";
-
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  maximumFractionDigits: 2
-});
+import { coerceStoredAmountToCents, formatEuro, parseEuroInput } from "./format";
+import { ENTRY_TYPE_META, ENTRY_TYPES, STORAGE_VERSION, type Entry, type EntryDraftInput, type EntryType } from "./types";
 
 function createId(): string {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
@@ -14,28 +9,35 @@ function createId(): string {
   return `entry-${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
 }
 
-export function toMoney(value: unknown): number {
-  const numeric = Number(value);
-  if (!Number.isFinite(numeric)) {
-    return 0;
-  }
-  return Math.max(0, Math.round(numeric * 100) / 100);
-}
-
 function isEntryType(value: unknown): value is EntryType {
   return typeof value === "string" && ENTRY_TYPES.includes(value as EntryType);
 }
 
+function centsFromDraftValue(value: unknown): number | null {
+  if (typeof value === "number") {
+    if (!Number.isFinite(value)) {
+      return null;
+    }
+    return Math.max(0, Math.round(value * 100));
+  }
+
+  if (typeof value === "string") {
+    return parseEuroInput(value);
+  }
+
+  return null;
+}
+
 export function computePotential(type: EntryType, paidPrice: number, referencePrice: number, amount: number): number {
   if (type === "avoid") {
-    return toMoney(referencePrice);
+    return Math.max(0, referencePrice);
   }
 
   if (type === "cheaper") {
-    return toMoney(referencePrice - paidPrice);
+    return Math.max(0, referencePrice - paidPrice);
   }
 
-  return toMoney(amount);
+  return Math.max(0, amount);
 }
 
 export function createEntryFromDraft(
@@ -43,7 +45,7 @@ export function createEntryFromDraft(
   existingEntry?: Entry
 ): { entry: Entry | null; error: string } {
   if (!isEntryType(draft.type)) {
-    return { entry: null, error: "Please choose a valid entry type." };
+    return { entry: null, error: "Bitte waehle einen gueltigen Eintragstyp." };
   }
 
   const nowIso = new Date().toISOString();
@@ -55,31 +57,32 @@ export function createEntryFromDraft(
   let amount = 0;
 
   if (draft.type === "avoid") {
-    amount = toMoney(draft.amount);
+    const parsedAmount = centsFromDraftValue(draft.amount);
+    amount = parsedAmount ?? 0;
     referencePrice = amount;
     if (amount <= 0) {
-      return { entry: null, error: "Amount saved must be greater than $0.00." };
+      return { entry: null, error: "Bitte gib einen Betrag groesser als 0,00 EUR ein." };
     }
   }
 
   if (draft.type === "cheaper") {
-    referencePrice = toMoney(draft.referencePrice);
-    paidPrice = toMoney(draft.paidPrice);
+    referencePrice = centsFromDraftValue(draft.referencePrice) ?? 0;
+    paidPrice = centsFromDraftValue(draft.paidPrice) ?? 0;
 
     if (referencePrice <= 0) {
-      return { entry: null, error: "Usual price must be greater than $0.00." };
+      return { entry: null, error: "Der Referenzpreis muss groesser als 0,00 EUR sein." };
     }
 
-    const potential = computePotential(draft.type, paidPrice, referencePrice, amount);
-    if (potential <= 0) {
-      return { entry: null, error: "Cheaper entry must save more than $0.00." };
+    if (referencePrice <= paidPrice) {
+      return { entry: null, error: "Der Referenzpreis muss groesser als der bezahlte Preis sein." };
     }
   }
 
   if (draft.type === "income") {
-    amount = toMoney(draft.amount);
+    const parsedAmount = centsFromDraftValue(draft.amount);
+    amount = parsedAmount ?? 0;
     if (amount <= 0) {
-      return { entry: null, error: "Income amount must be greater than $0.00." };
+      return { entry: null, error: "Bitte gib einen Einkommensbetrag groesser als 0,00 EUR ein." };
     }
   }
 
@@ -99,7 +102,7 @@ export function createEntryFromDraft(
   return { entry, error: "" };
 }
 
-export function sanitizeStoredEntry(raw: unknown): Entry | null {
+export function sanitizeStoredEntry(raw: unknown, sourceVersion: number = STORAGE_VERSION): Entry | null {
   if (!raw || typeof raw !== "object") {
     return null;
   }
@@ -112,7 +115,6 @@ export function sanitizeStoredEntry(raw: unknown): Entry | null {
   const id = typeof candidate.id === "string" && candidate.id ? candidate.id : createId();
   const note = typeof candidate.note === "string" ? candidate.note.trim() : "";
   const date = normalizeISODate(typeof candidate.date === "string" ? candidate.date : undefined);
-
   const createdAt = typeof candidate.createdAt === "string" ? candidate.createdAt : new Date(`${date}T00:00:00`).toISOString();
   const updatedAt = typeof candidate.updatedAt === "string" ? candidate.updatedAt : createdAt;
 
@@ -121,7 +123,7 @@ export function sanitizeStoredEntry(raw: unknown): Entry | null {
   let potential = 0;
 
   if (candidate.type === "avoid") {
-    referencePrice = toMoney(candidate.referencePrice ?? candidate.potential);
+    referencePrice = coerceStoredAmountToCents(candidate.referencePrice ?? candidate.potential, sourceVersion);
     potential = referencePrice;
     if (potential <= 0) {
       return null;
@@ -129,16 +131,16 @@ export function sanitizeStoredEntry(raw: unknown): Entry | null {
   }
 
   if (candidate.type === "cheaper") {
-    paidPrice = toMoney(candidate.paidPrice);
-    referencePrice = toMoney(candidate.referencePrice);
-    potential = toMoney(referencePrice - paidPrice);
+    paidPrice = coerceStoredAmountToCents(candidate.paidPrice, sourceVersion);
+    referencePrice = coerceStoredAmountToCents(candidate.referencePrice, sourceVersion);
+    potential = referencePrice - paidPrice;
     if (referencePrice <= 0 || potential <= 0) {
       return null;
     }
   }
 
   if (candidate.type === "income") {
-    potential = toMoney(candidate.potential ?? candidate.referencePrice ?? candidate.paidPrice);
+    potential = coerceStoredAmountToCents(candidate.potential ?? candidate.referencePrice ?? candidate.paidPrice, sourceVersion);
     if (potential <= 0) {
       return null;
     }
@@ -167,12 +169,12 @@ export function sortEntriesByMostRecent(entries: Entry[]): Entry[] {
   });
 }
 
-export function formatCurrency(amount: number): string {
-  return currencyFormatter.format(toMoney(amount));
+export function formatCurrency(amountCents: number): string {
+  return formatEuro(amountCents);
 }
 
-export function formatSignedCurrency(amount: number): string {
-  return `+${formatCurrency(amount)}`;
+export function formatSignedCurrency(amountCents: number): string {
+  return `+${formatCurrency(amountCents)}`;
 }
 
 export function getEntryDisplayTitle(entry: Entry): string {
@@ -181,14 +183,14 @@ export function getEntryDisplayTitle(entry: Entry): string {
   }
 
   if (entry.type === "avoid") {
-    return "Avoided purchase";
+    return "Vermeideter Kauf";
   }
 
   if (entry.type === "cheaper") {
-    return "Cheaper alternative";
+    return "Guenstigere Alternative";
   }
 
-  return "Extra income";
+  return "Zusaetzliches Einkommen";
 }
 
 export function getEntryTypeLabel(type: EntryType): string {

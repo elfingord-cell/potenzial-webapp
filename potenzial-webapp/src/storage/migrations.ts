@@ -18,7 +18,8 @@ export function migrateState(raw: unknown): AppState {
   }
 
   const candidate = raw as Record<string, unknown>;
-  const goal = sanitizeGoalInput(candidate.goal as Partial<AppState["goal"]> | undefined, DEFAULT_GOAL);
+  const sourceVersion = typeof candidate.version === "number" ? candidate.version : 1;
+  const goal = sanitizeGoalInput(candidate.goal as Partial<AppState["goal"]> | undefined, DEFAULT_GOAL, sourceVersion);
 
   const rawEntries = Array.isArray(candidate.entries)
     ? candidate.entries
@@ -27,7 +28,7 @@ export function migrateState(raw: unknown): AppState {
       : [];
 
   const entries = rawEntries
-    .map((entry) => sanitizeStoredEntry(entry))
+    .map((entry) => sanitizeStoredEntry(entry, sourceVersion))
     .filter((entry): entry is Entry => entry !== null);
 
   return {
