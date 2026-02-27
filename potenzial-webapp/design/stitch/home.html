@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Savings Goal Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#13ec5b",
+              "background-light": "#f6f8f6",
+              "background-dark": "#102216",
+              "secondary-dark": "#1a3322",
+              "text-main": "#0d1b12",
+              "text-muted": "#4c9a66",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+          },
+        },
+      }
+    </script>
+<style>
+        /* Custom styles for circular progress if needed, though we will try to use tailwind utilities mostly */
+        .circular-chart {
+            display: block;
+            margin: 0 auto;
+            max-width: 80%;
+            max-height: 250px;
+        }
+        .circle-bg {
+            fill: none;
+            stroke: #e7f3eb;
+            stroke-width: 2.5;
+        }
+        .circle {
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            /* Stroke is controlled via inline style for dynamic progress */
+            transition: stroke-dasharray 0.5s ease;
+        }
+        @media (prefers-color-scheme: dark) {
+            .circle-bg {
+                stroke: #1a3322;
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-gray-100 font-display min-h-screen flex flex-col overflow-hidden relative selection:bg-primary selection:text-white">
+<!-- Top Navigation / Header -->
+<header class="flex items-center justify-between px-6 pt-12 pb-4">
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-secondary-dark shadow-sm text-text-main dark:text-gray-100">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="text-lg font-bold tracking-tight">Europe Trip</h1>
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-secondary-dark shadow-sm text-text-main dark:text-gray-100">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col items-center justify-start pt-6 px-6 overflow-y-auto pb-24">
+<!-- Circular Progress Section -->
+<div class="relative w-full max-w-[320px] aspect-square flex items-center justify-center mb-6">
+<!-- SVG Circular Progress -->
+<svg class="circular-chart w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path class="circle-bg" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+<path class="circle stroke-primary text-primary" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="24, 100"></path>
+</svg>
+<!-- Center Text Overlay -->
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="text-4xl font-extrabold tracking-tight text-text-main dark:text-white">24%</span>
+<span class="text-sm font-medium text-text-muted dark:text-green-400 mt-1 uppercase tracking-wide">Complete</span>
+</div>
+</div>
+<!-- Balance Info -->
+<div class="text-center mb-8">
+<p class="text-sm font-medium text-text-muted dark:text-gray-400 mb-1">Total Saved</p>
+<h2 class="text-5xl font-extrabold tracking-tight text-text-main dark:text-white mb-2">$1,200</h2>
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-green-700 dark:text-green-300 text-xs font-semibold">
+                Target: $5,000
+            </div>
+</div>
+<!-- Recent Activity Mini List -->
+<div class="w-full max-w-sm">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold text-text-main dark:text-white">Recent Activity</h3>
+<a class="text-sm font-medium text-primary hover:underline" href="#">See All</a>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-4 bg-white dark:bg-secondary-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined text-xl">coffee</span>
+</div>
+<div>
+<p class="font-bold text-sm text-text-main dark:text-gray-200">Skipped Morning Coffee</p>
+<p class="text-xs text-text-muted dark:text-gray-400">Today, 9:41 AM</p>
+</div>
+</div>
+<span class="font-bold text-primary">+$5.50</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-white dark:bg-secondary-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400">
+<span class="material-symbols-outlined text-xl">work</span>
+</div>
+<div>
+<p class="font-bold text-sm text-text-main dark:text-gray-200">Freelance Gig</p>
+<p class="text-xs text-text-muted dark:text-gray-400">Yesterday</p>
+</div>
+</div>
+<span class="font-bold text-primary">+$150.00</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<div class="fixed bottom-24 right-6 z-20">
+<button class="group flex items-center justify-center w-14 h-14 rounded-full bg-text-main dark:bg-primary shadow-lg shadow-green-900/20 hover:scale-105 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-white dark:text-black text-3xl group-hover:rotate-90 transition-transform duration-300">add</span>
+</button>
+</div>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 border-t border-[#e7f3eb] dark:border-gray-800 bg-[#f8fcf9] dark:bg-background-dark pb-safe pt-2 z-10">
+<div class="flex justify-around items-end pb-4 px-2">
+<a class="flex flex-1 flex-col items-center gap-1 group" href="#">
+<div class="relative flex items-center justify-center w-12 h-8 rounded-full bg-primary/20 dark:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-text-main dark:text-primary text-[24px]">home</span>
+</div>
+<span class="text-[10px] font-medium text-text-main dark:text-primary">Home</span>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 group text-text-muted dark:text-gray-500 hover:text-text-main dark:hover:text-gray-300 transition-colors" href="#">
+<div class="flex items-center justify-center h-8 w-12">
+<span class="material-symbols-outlined text-[24px]">bar_chart</span>
+</div>
+<span class="text-[10px] font-medium">Insights</span>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 group text-text-muted dark:text-gray-500 hover:text-text-main dark:hover:text-gray-300 transition-colors" href="#">
+<div class="flex items-center justify-center h-8 w-12">
+<span class="material-symbols-outlined text-[24px]">person</span>
+</div>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</div>
+<!-- Safe area spacing for iOS Home Indicator -->
+<div class="h-1 w-full"></div>
+</nav>
+</body></html>

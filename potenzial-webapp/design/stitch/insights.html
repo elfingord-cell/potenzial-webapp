@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Savings Insights &amp; Trends</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-slate-900 dark:text-slate-100 min-h-screen flex flex-col justify-between">
+<!-- Header -->
+<div class="sticky top-0 z-10 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 pb-3 justify-between">
+<button class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined !text-[24px]">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-10">Insights</h2>
+</div>
+</div>
+<!-- Main Content -->
+<div class="flex-1 overflow-y-auto">
+<!-- Summary Cards -->
+<div class="flex flex-wrap gap-4 p-4">
+<div class="flex min-w-[158px] flex-1 flex-col gap-1 rounded-xl p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal">Total Saved (Week)</p>
+<span class="material-symbols-outlined text-primary text-sm">trending_up</span>
+</div>
+<p class="text-slate-900 dark:text-white tracking-tight text-2xl font-bold leading-tight mt-1">$145.00</p>
+<p class="text-primary text-sm font-medium leading-normal bg-primary/10 dark:bg-primary/20 w-fit px-2 py-0.5 rounded text-[11px]">+12% vs last week</p>
+</div>
+<div class="flex min-w-[158px] flex-1 flex-col gap-1 rounded-xl p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal">Total Saved (Month)</p>
+<span class="material-symbols-outlined text-primary text-sm">calendar_month</span>
+</div>
+<p class="text-slate-900 dark:text-white tracking-tight text-2xl font-bold leading-tight mt-1">$620.00</p>
+<p class="text-primary text-sm font-medium leading-normal bg-primary/10 dark:bg-primary/20 w-fit px-2 py-0.5 rounded text-[11px]">+5% vs last month</p>
+</div>
+</div>
+<!-- Chart Section -->
+<div class="px-4 py-2">
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="flex items-end justify-between mb-6">
+<div class="flex flex-col gap-1">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal uppercase tracking-wider">Last 7 Days</p>
+<p class="text-slate-900 dark:text-white tracking-tight text-3xl font-bold leading-tight truncate">$145.00</p>
+</div>
+<div class="flex gap-1 items-center bg-slate-50 dark:bg-slate-800 px-3 py-1.5 rounded-full border border-slate-100 dark:border-slate-700">
+<span class="material-symbols-outlined text-primary text-sm">bar_chart</span>
+<p class="text-slate-600 dark:text-slate-300 text-xs font-semibold leading-normal">Weekly View</p>
+</div>
+</div>
+<!-- Bar Chart -->
+<div class="grid grid-cols-7 gap-3 h-48 items-end justify-items-center w-full">
+<!-- Day 1 -->
+<div class="flex flex-col items-center gap-2 w-full h-full justify-end group cursor-pointer">
+<div class="w-full bg-primary/20 dark:bg-primary/10 rounded-t-sm relative h-[30%] group-hover:bg-primary/40 transition-all duration-300 flex items-end">
+<div class="w-full bg-primary rounded-t-sm h-full opacity-80 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<p class="text-slate-400 dark:text-slate-500 text-xs font-semibold">M</p>
+</div>
+<!-- Day 2 -->
+<div class="flex flex-col items-center gap-2 w-full h-full justify-end group cursor-pointer">
+<div class="w-full bg-primary/20 dark:bg-primary/10 rounded-t-sm relative h-[65%] group-hover:bg-primary/40 transition-all duration-300 flex items-end">
+<div class="w-full bg-primary rounded-t-sm h-full opacity-80 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<p class="text-slate-400 dark:text-slate-500 text-xs font-semibold">T</p>
+</div>
+<!-- Day 3 -->
+<div class="flex flex-col items-center gap-2 w-full h-full justify-end group cursor-pointer">
+<div class="w-full bg-primary/20 dark:bg-primary/10 rounded-t-sm relative h-[45%] group-hover:bg-primary/40 transition-all duration-300 flex items-end">
+<div class="w-full bg-primary rounded-t-sm h-full opacity-80 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<p class="text-slate-400 dark:text-slate-500 text-xs font-semibold">W</p>
+</div>
+<!-- Day 4 -->
+<div class="flex flex-col items-center gap-2 w-full h-full justify-end group cursor-pointer">
+<div class="w-full bg-primary/20 dark:bg-primary/10 rounded-t-sm relative h-[25%] group-hover:bg-primary/40 transition-all duration-300 flex items-end">
+<div class="w-full bg-primary rounded-t-sm h-full opacity-80 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<p class="text-slate-400 dark:text-slate-500 text-xs font-semibold">T</p>
+</div>
+<!-- Day 5 -->
+<div class="flex flex-col items-center gap-2 w-full h-full justify-end group cursor-pointer">
+<div class="w-full bg-primary/20 dark:bg-primary/10 rounded-t-sm relative h-[80%] group-hover:bg-primary/40 transition-all duration-300 flex items-end">
+<div class="w-full bg-primary rounded-t-sm h-full opacity-80 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<p class="text-slate-400 dark:text-slate-500 text-xs font-semibold">F</p>
+</div>
+<!-- Day 6 -->
+<div class="flex flex-col items-center gap-2 w-full h-full justify-end group cursor-pointer">
+<div class="w-full bg-primary/20 dark:bg-primary/10 rounded-t-sm relative h-[90%] group-hover:bg-primary/40 transition-all duration-300 flex items-end">
+<div class="w-full bg-primary rounded-t-sm h-full opacity-80 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<p class="text-slate-400 dark:text-slate-500 text-xs font-semibold">S</p>
+</div>
+<!-- Day 7 -->
+<div class="flex flex-col items-center gap-2 w-full h-full justify-end group cursor-pointer">
+<div class="w-full bg-primary/20 dark:bg-primary/10 rounded-t-sm relative h-[15%] group-hover:bg-primary/40 transition-all duration-300 flex items-end">
+<div class="w-full bg-primary rounded-t-sm h-full opacity-80 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<p class="text-slate-400 dark:text-slate-500 text-xs font-semibold">S</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Stats List -->
+<div class="p-4 flex flex-col gap-3">
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="bg-slate-100 dark:bg-slate-800 rounded-full p-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-[20px]">savings</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal">Average Daily Saved</p>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-semibold leading-normal text-right">$20.71</p>
+</div>
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="bg-slate-100 dark:bg-slate-800 rounded-full p-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-[20px]">local_cafe</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal">Top Category</p>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-semibold leading-normal text-right">Coffee Skipped</p>
+</div>
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="bg-slate-100 dark:bg-slate-800 rounded-full p-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-[20px]">flag</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal">Projected Monthly</p>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-semibold leading-normal text-right">$642.00</p>
+</div>
+</div>
+<div class="h-10"></div>
+</div>
+<!-- Bottom Navigation -->
+<div class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pb-6 pt-2">
+<div class="flex justify-between items-center max-w-sm mx-auto">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500 hover:text-primary dark:hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Dashboard</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary" href="#">
+<span class="material-symbols-outlined text-[24px] font-variation-settings-fill">bar_chart</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Insights</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500 hover:text-primary dark:hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Profile</p>
+</a>
+</div>
+</div>
+</body></html>
