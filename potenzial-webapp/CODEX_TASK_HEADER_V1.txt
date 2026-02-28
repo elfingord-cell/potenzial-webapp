@@ -1,0 +1,29 @@
+Follow ENGINEERING_MANIFEST_V1.md and PROJECT_RULES.md.
+
+CURRENT BEHAVIOR:
+- (facts only)
+
+GOAL:
+- (1–3 sentences)
+
+ACCEPTANCE CRITERIA:
+1.
+2.
+3.
+
+NON-GOALS:
+- No refactor outside scope
+- No UI redesign
+- No new libraries
+
+CONSTRAINTS:
+- Minimal diff
+- Preserve existing patterns
+- Touch only files required for this task
+
+VERIFICATION:
+- Manual steps to validate
+- Edge cases to check
+
+DELIVERABLE:
+- Code changes only (plus any required tests)

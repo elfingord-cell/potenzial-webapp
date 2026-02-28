@@ -12,6 +12,11 @@ npm run dev
 
 Open: `http://localhost:5173`
 
+Dev port behavior:
+- `npm run dev` prefers `127.0.0.1:5173`.
+- If `5173` is occupied, Vite automatically falls back to the next free port.
+- Use the URL printed in the terminal to open the active dev server.
+
 ## What is included
 
 - Stitch references copied unchanged to `design/stitch/`:
