@@ -71,7 +71,7 @@ function renderProgressRing(progressPercent: number, progressRingPercent: number
 export function renderHomeScreen(data: HomeScreenData): string {
   const recentContent = data.recentEntries.length
     ? data.recentEntries.map((entry) => renderEntryRow(entry, false)).join("")
-    : renderEmptyCard("Noch keine Aktivitaeten. Tippe auf +, um deinen ersten Eintrag anzulegen.");
+    : renderEmptyCard("Noch keine Aktivitäten. Tippe auf +, um deinen ersten Eintrag anzulegen.");
 
   return `
     <header class="flex items-center justify-between px-6 pt-12 pb-4">

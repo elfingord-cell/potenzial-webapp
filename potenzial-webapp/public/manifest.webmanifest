@@ -1,7 +1,7 @@
 {
-  "name": "Potenzial Savings Tracker",
+  "name": "Potenzial",
   "short_name": "Potenzial",
-  "description": "Track savings progress from avoided purchases, cheaper alternatives, and extra income.",
+  "description": "Behalte dein Sparpotenzial aus Verzicht, guenstigeren Alternativen und Zusatzeinkommen im Blick.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
