@@ -279,16 +279,16 @@ export function renderEntrySheet(sheet: EntrySheetViewModel): string {
             <label class="flex flex-col w-full group">
               <p class="text-slate-500 text-sm font-medium mb-2 pl-1">${amountLabel}</p>
               <div class="relative flex items-center">
-                <span class="absolute left-4 text-slate-400 text-3xl font-semibold material-symbols-outlined">attach_money</span>
                 <input
                   name="amount"
-                  class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-slate-900 bg-slate-100 border-0 focus:ring-2 focus:ring-primary/50 focus:bg-white h-20 pl-12 pr-4 text-4xl font-bold tracking-tight placeholder:text-slate-300 transition-all shadow-inner"
+                  class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-slate-900 bg-slate-100 border-0 focus:ring-2 focus:ring-primary/50 focus:bg-white h-20 pl-4 pr-12 text-4xl font-bold tracking-tight placeholder:text-slate-300 transition-all shadow-inner"
                   inputmode="decimal"
-                  placeholder="0,00"
+                  placeholder="0,00 €"
                   type="text"
                   autocomplete="off"
                   value="${escapeHtml(sheet.amount)}"
                 />
+                <span class="pointer-events-none absolute right-4 text-2xl font-semibold text-slate-500">€</span>
               </div>
             </label>
           </div>
@@ -342,7 +342,7 @@ export function renderEntrySheet(sheet: EntrySheetViewModel): string {
           <p class="px-6 pb-4 text-sm font-medium text-rose-600 min-h-[24px]">${escapeHtml(sheet.error)}</p>
 
           <div class="px-6 pb-6">
-            <button type="submit" class="w-full h-14 flex items-center justify-center rounded-xl bg-primary text-slate-900 font-bold text-3xl shadow-lg shadow-primary/20 active:scale-[0.98] transition-all hover:bg-green-400">
+            <button type="submit" class="w-full h-14 flex items-center justify-center rounded-xl bg-slate-900 text-white font-bold text-3xl shadow-lg shadow-slate-900/25 active:scale-[0.98] transition-all hover:bg-slate-800">
               ${buttonText}
             </button>
           </div>

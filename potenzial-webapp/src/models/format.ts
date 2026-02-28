@@ -16,14 +16,6 @@ const dateFormatterShort = new Intl.DateTimeFormat("de-DE", {
   year: "numeric"
 });
 
-const dateTimeFormatterShort = new Intl.DateTimeFormat("de-DE", {
-  day: "2-digit",
-  month: "2-digit",
-  year: "numeric",
-  hour: "2-digit",
-  minute: "2-digit"
-});
-
 const timeFormatter = new Intl.DateTimeFormat("de-DE", {
   hour: "2-digit",
   minute: "2-digit"
@@ -52,6 +44,10 @@ export function normalizeCents(value: unknown): number {
 
 export function formatEuro(cents: number): string {
   return euroFormatter.format(normalizeCents(cents) / 100);
+}
+
+export function formatDateDE(date: Date): string {
+  return dateFormatterShort.format(date);
 }
 
 export function formatEuroInput(cents: number): string {
@@ -126,6 +122,19 @@ export function coerceStoredAmountToCents(value: unknown, sourceVersion: number)
     return Math.max(0, Math.round(numeric * 100));
   }
 
+  if (sourceVersion === 2 && typeof value === "number") {
+    if (!Number.isFinite(value)) {
+      return 0;
+    }
+
+    // Some v2 installs persisted major-unit floats; preserve integer cents, convert decimal major units.
+    if (Number.isInteger(value)) {
+      return normalizeCents(value);
+    }
+
+    return Math.max(0, Math.round(value * 100));
+  }
+
   if (typeof value === "string") {
     const trimmed = value.trim();
     if (/^\d+$/.test(trimmed)) {
@@ -143,7 +152,7 @@ export function coerceStoredAmountToCents(value: unknown, sourceVersion: number)
 
 export function formatDateTimeDE(date: Date, mode: "short" | "relative" = "short"): string {
   if (mode === "short") {
-    return dateFormatterShort.format(date);
+    return formatDateDE(date);
   }
 
   const now = new Date();
@@ -160,5 +169,5 @@ export function formatDateTimeDE(date: Date, mode: "short" | "relative" = "short
     return `Gestern, ${timeLabel}`;
   }
 
-  return dateTimeFormatterShort.format(date);
+  return formatDateDE(date);
 }

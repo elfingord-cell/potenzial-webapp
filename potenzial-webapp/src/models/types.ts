@@ -55,7 +55,7 @@ export const ENTRY_TYPE_META: Record<EntryType, EntryTypeMeta> = {
     toneClassName: "bg-orange-100 text-orange-600"
   },
   cheaper: {
-    label: "Guenstiger",
+    label: "G\u00fcnstiger",
     amountLabel: "Ersparnis",
     icon: "sell",
     toneClassName: "bg-blue-100 text-blue-600"

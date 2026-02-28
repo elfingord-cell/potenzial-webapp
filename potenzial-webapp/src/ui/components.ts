@@ -79,14 +79,14 @@ export function renderBottomNav(currentRoute: Route): string {
 
 export function renderFab(): string {
   return `
-    <div class="fixed bottom-24 right-6 z-40">
+    <div class="pointer-events-none fixed bottom-[calc(env(safe-area-inset-bottom)+90px)] left-1/2 z-40 w-full max-w-md -translate-x-1/2 px-4">
       <button
         type="button"
         data-action="open-sheet"
-        class="group flex items-center justify-center w-14 h-14 rounded-full bg-slate-900 shadow-lg shadow-green-900/20 hover:scale-105 active:scale-95 transition-transform"
+        class="pointer-events-auto ml-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-900 text-white shadow-lg shadow-green-900/20 transition-transform hover:scale-105 active:scale-95"
         aria-label="Eintrag hinzufuegen"
       >
-        <span class="material-symbols-outlined text-white text-3xl group-hover:rotate-90 transition-transform duration-300">add</span>
+        <span class="text-4xl font-semibold leading-none">+</span>
       </button>
     </div>
   `;
