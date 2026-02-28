@@ -10,7 +10,7 @@ npm install
 npm run dev
 ```
 
-Open: `http://localhost:5173`
+Open: use the URL printed in the terminal (usually `http://127.0.0.1:5173`).
 
 Dev port behavior:
 - `npm run dev` prefers `127.0.0.1:5173`.
@@ -71,7 +71,7 @@ Computation rules:
 
 ### iOS Add to Home Screen
 
-1. Open the app in Safari (`http://localhost:5173` on your local network host).
+1. Open the app in Safari using the active dev URL printed in the terminal (usually port `5173`) on your local network host.
 2. Tap Share -> **Add to Home Screen**.
 3. Launch from home screen and confirm standalone display.
 4. Add an entry, close app, relaunch, and confirm data persists.
